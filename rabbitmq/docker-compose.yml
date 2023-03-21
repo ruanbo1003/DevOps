@@ -1,0 +1,21 @@
+
+version: '3.4'
+
+services:
+  dev_rabbitmq:
+    restart: unless-stopped
+    image: "rabbitmq:management"
+    container_name: dev_rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: 'guest'
+      RABBITMQ_DEFAULT_PASS: 'guest'
+      RABBITMQ_PID_FILE: '/var/lib/rabbitmq/rabbitmq'
+      RABBITMQ_USER: 'root'
+      RABBITMQ_PASSWORD: 'abc123xyz'
+      RABBITMQ_VHOST: 'dev-vhost'
+    command: ['/app/rabbitmq_init.sh']
+    volumes:
+      - ./rabbitmq_init.sh:/app/rabbitmq_init.sh
