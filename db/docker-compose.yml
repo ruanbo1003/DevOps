@@ -72,19 +72,6 @@ services:
 #      KAFKA_ADVERTISED_LISTENERS: 'PLAINTEXT://localhost:19092'
       KAFKA_ZOOKEEPER_CONNECT: dev_my_zoomkeeper:2181
 
-  dev_my_rabbit:
-    restart: unless-stopped
-    image: "rabbitmq:management"
-    container_name: dev_my_rabbit
-    networks:
-      - "dev_networks"
-    ports:
-      - "5672:5672"
-      - "15672:15672"
-    environment:
-      RABBITMQ_DEFAULT_USER: 'guest'
-      RABBITMQ_DEFAULT_PASS: 'guest'
-
   dev_my_mongo:
     restart: unless-stopped
     image: "harbor.ops.qianxin-inc.cn/ateam/mongo:3.4"
