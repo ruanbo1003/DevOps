@@ -1,0 +1,57 @@
+
+version: '3.4'
+
+services:
+  dev_sentry_redis:
+    # redis
+    restart: unless-stopped
+    privileged: true
+    image: redis:latest
+    container_name: dev_sentry_redis
+    tty: true
+
+  dev_sentry_postgres:
+    # postgres
+    restart: unless-stopped
+    privileged: true
+    image: postgres:latest
+    container_name: dev_sentry_postgres
+    environment:
+      POSTGRES_USER: sentry
+      POSTGRES_PASSWORD: abc123321
+      POSTGRES_DB: sentry
+    tty: true
+
+  dev_sentry_base:
+    image: sentry:latest
+    container_name: dev_sentry_base
+    restart: unless-stopped
+    ports:
+      - '9000:9000'
+    env_file:
+      - .env
+    depends_on:
+      - dev_sentry_redis
+      - dev_sentry_postgres
+
+  dev_sentry_cron:
+      image: sentry:latest
+      container_name: dev_sentry_cron
+      restart: unless-stopped
+      env_file:
+        - .env
+      depends_on:
+        - dev_sentry_redis
+        - dev_sentry_postgres
+      command: "sentry run cron"
+
+  dev_sentry_worker:
+      image: sentry:latest
+      container_name: dev_sentry_worker
+      restart: unless-stopped
+      env_file:
+        - .env
+      depends_on:
+        - dev_sentry_redis
+        - dev_sentry_postgres
+      command: "sentry run worker"
